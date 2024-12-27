@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 
 class DetailPage extends StatelessWidget {
-  final Map<String,String> todoItem ;
+  final Map<String, dynamic> todoItem;
+  final dynamic itemIndex;
 
-  DetailPage({required this.todoItem});
+  DetailPage({required this.todoItem, required this.itemIndex});
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: AppBar(
-        title: Text('Detail page',style: TextStyle(color: Colors.white),),
+        title: Text(
+          'Detail page',
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: Colors.red,
       ),
       body: Column(
@@ -20,8 +24,21 @@ class DetailPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(onPressed: null, child: Text('Mark as read')),
-              ElevatedButton(onPressed: null, child: Text('Delete item')),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context,itemIndex);
+                  },
+                  child: Text('Mark as read')),
+
+
+
+              ElevatedButton(
+
+                  onPressed: () {
+                    Navigator.pop(context,todoItem);
+                    print(todoItem);
+                  },
+                  child: Text('Delete item')),
             ],
           )
         ],

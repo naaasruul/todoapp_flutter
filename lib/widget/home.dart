@@ -10,26 +10,30 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var _todos = [
+  dynamic _todos = [
     {
       'name': 'Navigation',
       'desc': 'Simple navigation, pass forward, pass backward data',
       'place': 'Meeting Room',
+      'status' :false,
     },
     {
       'name': 'Lunch Break',
       'desc': '1h30 lunch break',
       'place': 'Own place',
+      'status' :false,
     },
     {
       'name': 'ListView',
       'desc': 'Listview, ListTile, and Card',
       'place': 'Meeting Room',
+      'status' :false,
     },
     {
       'name': 'Shared prferences',
       'desc': 'Save and retrive data',
       'place': 'Meeting Room',
+      'status' :false,
     },
   ];
 
@@ -50,17 +54,30 @@ class _HomePageState extends State<HomePage> {
           return Card(
             color: Colors.yellow,
             child: ListTile(
-              title: Text(_todos[index]['name']!),
+              title: Row(
+                children: [
+                  Text(_todos[index]['name']!),
+                  Icon(_todos[index]['status'] ? Icons.check : null),
+                ],
+              ),
               subtitle: Text(_todos[index]['place']!),
               trailing: Icon(Icons.chevron_right),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
+              onTap: () async {
+                var selectedItem = await Navigator.push(context, MaterialPageRoute(
                         builder: (context) => DetailPage(
                               todoItem: _todos[index],
+                              itemIndex: index,
                             )));
+
+                setState(() {
+                  if(selectedItem is int){
+                    _todos[index]['status'] = true;
+                  }else{
+                  _todos.remove(selectedItem);
+                  }
+                });
               },
+              iconColor: Colors.red,
             ),
           );
         },
@@ -68,12 +85,13 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.red,
-        onPressed: () async{
-          var item = await Navigator.push(context, MaterialPageRoute(builder: (context) {
+        onPressed: () async {
+          var item = await Navigator.push(context,
+              MaterialPageRoute(builder: (context) {
             return AddPage();
           }));
 
-          if(item != null){
+          if (item != null) {
             setState(() {
               _todos.add(item);
             });
