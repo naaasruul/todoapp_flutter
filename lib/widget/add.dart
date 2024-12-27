@@ -34,7 +34,13 @@ class AddPage extends StatelessWidget {
                 print(placeEditingController.text);
                 print(descEditingController.text);
 
-                Navigator.pop(context);
+                // untuk pass dari sini ke page sebelum.
+                var itemToPass = {
+                  'name':nameEditingController.text,
+                  'desc':descEditingController.text,
+                  'place':placeEditingController.text,
+                };
+                Navigator.pop(context,itemToPass);
               },
               child: Text(
                 'Add new item',

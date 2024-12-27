@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todoapp/widget/add.dart';
+import 'package:todoapp/widget/detail.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -45,21 +46,38 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.red,
       ),
       body: ListView.builder(
-        itemBuilder: (context,index){
-          return ListTile(
-            title: Text(_todos[index]['name']!),
-            subtitle: Text(_todos[index]['place']!),
-            trailing: Icon(Icons.chevron_right),
+        itemBuilder: (context, index) {
+          return Card(
+            color: Colors.yellow,
+            child: ListTile(
+              title: Text(_todos[index]['name']!),
+              subtitle: Text(_todos[index]['place']!),
+              trailing: Icon(Icons.chevron_right),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => DetailPage(
+                              todoItem: _todos[index],
+                            )));
+              },
+            ),
           );
         },
         itemCount: _todos.length,
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.red,
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
+        onPressed: () async{
+          var item = await Navigator.push(context, MaterialPageRoute(builder: (context) {
             return AddPage();
           }));
+
+          if(item != null){
+            setState(() {
+              _todos.add(item);
+            });
+          }
         },
         child: Icon(
           Icons.add,
